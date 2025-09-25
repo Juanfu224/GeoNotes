@@ -11,8 +11,10 @@ final class Match {
                 point.lon() >= area.topLeft().lon() &&
                 point.lon() <= area.bottomRight().lon();
     }
+
     /**
-     * Versión didáctica estilo “record patterns” (Java 21) para ubicar un punto en regiones lógicas.
+     * Versión didáctica estilo “record patterns” (Java 21) para ubicar un punto en
+     * regiones lógicas.
      * Utiliza:
      * - Switch como expresión (devuelve un valor directamente).
      * - Record pattern: desestructura el record GeoPoint en lat y lon.
