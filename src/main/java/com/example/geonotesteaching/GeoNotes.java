@@ -65,6 +65,7 @@ public class GeoNotes {
         System.out.println("  📝 Bienvenid@ a la aplicación GeoNotes");
         System.out.println("--------------------------------------");
         boolean running = true;
+        int ultimasNotas;
         while (running) {
             printMenu();
             try {
@@ -84,14 +85,35 @@ public class GeoNotes {
                  * Aquí lo empleamos en su forma de "switch moderno" sobre efectos (no devuelve
                  * valor).
                  */
+
                 switch (choice) {
-                    case 1 -> createNote();
-                    case 2 -> listNotes();
-                    case 3 -> filterNotes();
-                    case 4 -> exportNotesToJson();
-                    case 5 -> running = false;
-                    default -> System.out.println("❌ Opción no válida. Inténtalo de nuevo.");
+                    case 1:
+                        createNote();
+                        break;
+                    case 2:
+                        listNotes();
+                        break;
+                    case 3:
+                        filterNotes();
+                        break;
+                    case 4:
+                        exportNotesToJson();
+                        break;
+                    case 5:
+                        System.out.print("¿Cuantas notas quiere ver?: ");
+                        ultimasNotas = scanner.nextInt();
+                        timeline.mostrarNotas(timeline.latest(ultimasNotas));
+                        break;
+                    case 6:
+                        running = false;
+                        break;
+
+                    default:
+                        System.out.println("❌ Opción no válida. Inténtalo de nuevo.");
+                        break;
+
                 }
+
             } catch (NumberFormatException e) {
                 /*
                  * Manejo de errores "clásico" (en Kotlin tendrías null-safety y Result más
@@ -111,7 +133,8 @@ public class GeoNotes {
         System.out.println("2. Listar todas las notas");
         System.out.println("3. Filtrar notas por palabra clave");
         System.out.println("4. Exportar notas a JSON (Text Blocks)");
-        System.out.println("5. Salir");
+        System.out.println("5. Listar últimas N notas");
+        System.out.println("6. Salir");
         System.out.print("Elige una opción: ");
     }
 

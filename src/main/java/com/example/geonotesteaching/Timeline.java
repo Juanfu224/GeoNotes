@@ -1,7 +1,13 @@
 package com.example.geonotesteaching;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,6 +27,41 @@ final class Timeline {
 
     public Map<Long, Note> getNotes() {
         return notes;
+    }
+
+    public List<Note> latest(int n) {
+        List<Note> notas = new ArrayList<>();
+        List<Note> notasRecientes = new ArrayList<>();
+        notas.addAll(notes.values());
+        Collections.sort(notas, new NoteOrderDate());
+
+        for (int i = 0; i < n; i++)
+            notasRecientes.add(notas.get(i));
+
+        return notasRecientes;
+
+    }
+
+    public void mostrarNotas(List<Note> notas) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (Note nota : notas) {
+            long id = nota.id();
+            String titulo = nota.title();
+            GeoPoint localizacion = nota.location();
+            Instant creacion = nota.createdAt();
+
+            double lat = localizacion.lat();
+            double lon = localizacion.lon();
+
+            // Convertir el Instant a LocalDate y formatear
+            String fechaFormateada = creacion
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .format(formatter);
+
+            System.out.println("- [ ID " + id + "] " + titulo + " — (" + lat + ", " + lon + ") — " + fechaFormateada);
+        }
     }
 
     // Esta clase final genera la salida JSON usando 'text blocks'.
