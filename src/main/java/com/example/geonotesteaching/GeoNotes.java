@@ -13,6 +13,7 @@ import java.util.Scanner;
  * - Java 16: "records" (GeoPoint, Note, etc.) — clases inmutables concisas con constructor canónico, equals/hashCode/toString.
  * - Java 17: "sealed classes/interfaces" (Attachment) — jerarquías cerradas que el compilador puede verificar exhaustivamente.
  * - Java 17: pattern matching para instanceof (lo verás en Describe).
+
  * - Java 21: "record patterns" (lo verás en Match donde se desestructura un record directamente en un switch/if).
  * - Java 21: "Sequenced Collections" (Timeline podría usar SequencedMap/LinkedHashMap.reversed(); aquí mostramos el enfoque clásico, pero coméntalo en clase).
  * - Java 21: "Virtual Threads" (demo aparte en el proyecto moderno; no se usan aquí).
