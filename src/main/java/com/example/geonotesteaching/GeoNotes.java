@@ -96,9 +96,12 @@ public class GeoNotes {
                         listNotes();
                         break;
                     case 3:
-                        mostrarUbicaciones();
+                        listNotesReversed();
                         break;
                     case 4:
+                        mostrarUbicaciones();
+                        break;
+                    case 5:
                         System.out.println("1. Busqueda normal(nombre/contenido)");
                         System.out.println("2. Busqueda avanzada(nombre/contenido/latitud/longitud)");
                         choice = scanner.nextInt();
@@ -119,15 +122,15 @@ public class GeoNotes {
                             busquedaAvanzada(clave, latMin, latMax, lonMin, lonMax);
                         }
                         break;
-                    case 5:
+                    case 6:
                         exportNotesToJson();
                         break;
-                    case 6:
+                    case 7:
                         System.out.print("¿Cuantas notas quiere ver?: ");
                         ultimasNotas = scanner.nextInt();
                         timeline.mostrarNotas(timeline.latest(ultimasNotas));
                         break;
-                    case 7:
+                    case 8:
                         running = false;
                         break;
 
@@ -154,11 +157,12 @@ public class GeoNotes {
         System.out.println("\n--- Menú ---");
         System.out.println("1. Crear una nueva nota");
         System.out.println("2. Listar todas las notas");
-        System.out.println("3. Mostrar ubicación descriptiva de las notas");
-        System.out.println("4. Filtrar notas");
-        System.out.println("5. Exportar notas a JSON (Text Blocks)");
-        System.out.println("6. Listar últimas N notas");
-        System.out.println("7. Salir");
+        System.out.println("3. Listar todas las notas invertidas");
+        System.out.println("4. Mostrar ubicación descriptiva de las notas");
+        System.out.println("5. Filtrar notas");
+        System.out.println("6. Exportar notas a JSON (Text Blocks)");
+        System.out.println("7. Listar últimas N notas");
+        System.out.println("8. Salir");
         System.out.print("Elige una opción: ");
     }
 
@@ -228,6 +232,22 @@ public class GeoNotes {
             System.out.printf("ID: %d | %s | %s | loc=%s | adj=%s%n",
                     id, note.title(), note.content(), region, attachmentInfo);
         });
+    }
+
+    private static void listNotesReversed() {
+        System.out.println("\n--- Notas disponibles ---");
+        if (timeline.getNotes().isEmpty()) {
+            System.out.println("No hay notas creadas.");
+            return;
+        }
+        List<Note> notas = new ArrayList<>(timeline.reversed());
+        timeline.mostrarNotas(notas);
+
+        /*
+         * Bucle forEach sobre el Map<Long, Note>.
+         * En Kotlin harías algo similar con forEach y String templates.
+         */
+
     }
 
     private static void busquedaAvanzada(String clave, double latMin, double latMax, double lonMin, double lonMax) {
