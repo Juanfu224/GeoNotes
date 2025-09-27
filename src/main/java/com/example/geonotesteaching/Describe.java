@@ -33,8 +33,7 @@ final class Describe {
             case Audio audio -> "🎵 Audio";
 
             // Caso para enlaces: muestra la etiqueta si existe, sino la URL
-            case Link l -> "🔗 %s".formatted(
-                    (l.label() == null || l.label().isEmpty()) ? l.url() : l.label());
+            case Link l -> "🔗 %s".formatted(l.effectiveLabel());
 
             // Caso para videos largos (más de 120 segundos/2 minutos)
             case Video v when v.seconds() > 120 -> "🎬 Vídeo largo";

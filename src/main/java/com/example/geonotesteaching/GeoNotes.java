@@ -109,15 +109,14 @@ public class GeoNotes {
                             System.out.print("Introduce la palabra clave que quieres buscar: ");
                             String clave = scanner.nextLine();
                             System.out.print("Introduce la longitud minima: ");
-                            double latMin = scanner.nextInt();
+                            double latMin = Double.parseDouble(scanner.nextLine());
                             System.out.print("Introduce la longitud maxima: ");
-                            double latMax = scanner.nextInt();
+                            double latMax = Double.parseDouble(scanner.nextLine());
                             System.out.print("Introduce la latitud minima: ");
-                            double lonMin = scanner.nextInt();
+                            double lonMin = Double.parseDouble(scanner.nextLine());
                             System.out.print("Introduce la latitud maxima: ");
-                            double lonMax = scanner.nextInt();
+                            double lonMax = Double.parseDouble(scanner.nextLine());
                             busquedaAvanzada(clave, latMin, latMax, lonMin, lonMax);
-                            scanner.nextLine();
                         }
                         break;
                     case 5:
