@@ -1,6 +1,8 @@
 package com.example.geonotesteaching;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -65,6 +67,7 @@ public class GeoNotes {
         System.out.println("  📝 Bienvenid@ a la aplicación GeoNotes");
         System.out.println("--------------------------------------");
         boolean running = true;
+        int ultimasNotas;
         while (running) {
             printMenu();
             try {
@@ -84,14 +87,54 @@ public class GeoNotes {
                  * Aquí lo empleamos en su forma de "switch moderno" sobre efectos (no devuelve
                  * valor).
                  */
+
                 switch (choice) {
-                    case 1 -> createNote();
-                    case 2 -> listNotes();
-                    case 3 -> filterNotes();
-                    case 4 -> exportNotesToJson();
-                    case 5 -> running = false;
-                    default -> System.out.println("❌ Opción no válida. Inténtalo de nuevo.");
+                    case 1:
+                        createNote();
+                        break;
+                    case 2:
+                        listNotes();
+                        break;
+                    case 3:
+                        System.out.println("1. Busqueda normal(nombre/contenido)");
+                        System.out.println("2. Busqueda avanzada(nombre/contenido/latitud/longitud)");
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (choice == 1) {
+                            filterNotes();
+                        } else {
+                            System.out.print("Introduce la palabra clave que quieres buscar: ");
+                            String clave = scanner.nextLine();
+                            System.out.print("Introduce la longitud minima: ");
+                            double latMin = scanner.nextInt();
+                            System.out.print("Introduce la longitud maxima: ");
+                            double latMax = scanner.nextInt();
+                            System.out.print("Introduce la latitud minima: ");
+                            double lonMin = scanner.nextInt();
+                            System.out.print("Introduce la latitud maxima: ");
+                            double lonMax = scanner.nextInt();
+                            busquedaAvanzada(clave, latMin, latMax, lonMin, lonMax);
+                            scanner.nextLine();
+                        }
+                        break;
+                    case 4:
+                        exportNotesToJson();
+                        break;
+                    case 5:
+                        System.out.print("¿Cuantas notas quiere ver?: ");
+                        ultimasNotas = scanner.nextInt();
+                        timeline.mostrarNotas(timeline.latest(ultimasNotas));
+                        break;
+                    case 6:
+                        running = false;
+                        break;
+
+                    default:
+                        System.out.println("❌ Opción no válida. Inténtalo de nuevo.");
+                        break;
+
                 }
+
             } catch (NumberFormatException e) {
                 /*
                  * Manejo de errores "clásico" (en Kotlin tendrías null-safety y Result más
@@ -109,9 +152,10 @@ public class GeoNotes {
         System.out.println("\n--- Menú ---");
         System.out.println("1. Crear una nueva nota");
         System.out.println("2. Listar todas las notas");
-        System.out.println("3. Filtrar notas por palabra clave");
+        System.out.println("3. Filtrar notas");
         System.out.println("4. Exportar notas a JSON (Text Blocks)");
-        System.out.println("5. Salir");
+        System.out.println("5. Listar últimas N notas");
+        System.out.println("6. Salir");
         System.out.print("Elige una opción: ");
     }
 
@@ -181,6 +225,39 @@ public class GeoNotes {
             System.out.printf("ID: %d | %s | %s | loc=%s | adj=%s%n",
                     id, note.title(), note.content(), region, attachmentInfo);
         });
+    }
+
+    private static void busquedaAvanzada(String clave, double latMin, double latMax, double lonMin, double lonMax) {
+        List<Note> notas = new ArrayList<>();
+        List<Note> notasEncontradas = new ArrayList<>();
+        notas.addAll(timeline.getNotes().values());
+
+        boolean encontrado;
+
+        for (Note nota : notas) {
+            encontrado = claveEncontrada(clave, nota);
+            if (!encontrado)
+                encontrado = puntoEnRango(nota.location(), latMin, latMax, lonMin, lonMax);
+            if (encontrado)
+                notasEncontradas.add(nota);
+        }
+        if (notasEncontradas.isEmpty())
+            System.out.println("No se han en contrado notas relacionadas");
+        else
+            timeline.mostrarNotas(notasEncontradas);
+
+    }
+
+    private static boolean claveEncontrada(String clave, Note nota) {
+        return nota.title().contains(clave) || nota.content().contains(clave);
+    }
+
+    private static boolean puntoEnRango(GeoPoint punto, double latMin, double latMax, double lonMin, double lonMax) {
+        double lat, lon;
+        lat = punto.lat();
+        lon = punto.lon();
+
+        return lat >= latMin && lat <= latMax && lon >= lonMin && lon <= lonMax;
     }
 
     private static void filterNotes() {
