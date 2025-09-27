@@ -96,6 +96,9 @@ public class GeoNotes {
                         listNotes();
                         break;
                     case 3:
+                        mostrarUbicaciones();
+                        break;
+                    case 4:
                         System.out.println("1. Busqueda normal(nombre/contenido)");
                         System.out.println("2. Busqueda avanzada(nombre/contenido/latitud/longitud)");
                         choice = scanner.nextInt();
@@ -117,15 +120,15 @@ public class GeoNotes {
                             scanner.nextLine();
                         }
                         break;
-                    case 4:
+                    case 5:
                         exportNotesToJson();
                         break;
-                    case 5:
+                    case 6:
                         System.out.print("¿Cuantas notas quiere ver?: ");
                         ultimasNotas = scanner.nextInt();
                         timeline.mostrarNotas(timeline.latest(ultimasNotas));
                         break;
-                    case 6:
+                    case 7:
                         running = false;
                         break;
 
@@ -152,10 +155,11 @@ public class GeoNotes {
         System.out.println("\n--- Menú ---");
         System.out.println("1. Crear una nueva nota");
         System.out.println("2. Listar todas las notas");
-        System.out.println("3. Filtrar notas");
-        System.out.println("4. Exportar notas a JSON (Text Blocks)");
-        System.out.println("5. Listar últimas N notas");
-        System.out.println("6. Salir");
+        System.out.println("3. Mostrar ubicación descriptiva de las notas");
+        System.out.println("4. Filtrar notas");
+        System.out.println("5. Exportar notas a JSON (Text Blocks)");
+        System.out.println("6. Listar últimas N notas");
+        System.out.println("7. Salir");
         System.out.print("Elige una opción: ");
     }
 
@@ -258,6 +262,23 @@ public class GeoNotes {
         lon = punto.lon();
 
         return lat >= latMin && lat <= latMax && lon >= lonMin && lon <= lonMax;
+    }
+
+    private static void mostrarUbicaciones() {
+        System.out.println("\n--- Ubicación descriptiva de las notas ---");
+        if (timeline.getNotes().isEmpty()) {
+            System.out.println("No hay notas creadas.");
+            return;
+        }
+
+        timeline.getNotes().forEach((id, note) -> {
+            var gp = note.location();
+            // Aquí usamos el método de Describe
+            var region = Describe.where(gp);
+
+            System.out.printf("ID: %d | %s | loc=%s%n",
+                    id, note.title(), region);
+        });
     }
 
     private static void filterNotes() {
