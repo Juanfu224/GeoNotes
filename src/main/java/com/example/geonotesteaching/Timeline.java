@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 final class Timeline {
     private final Map<Long, Note> notes = new LinkedHashMap<>();
 
+    
     public void addNote(Note note) {
         notes.put(note.id(), note);
     }
@@ -76,7 +77,9 @@ final class Timeline {
                               "id": %d,
                               "title": "%s",
                               "content": "%s",
-                              "location": { "lat": %f, "lon": %f },
+                              "location": {
+                                "lat": %f,
+                                "lon": %f },
                               "createdAt": "%s"
                             }
                             """.formatted(
