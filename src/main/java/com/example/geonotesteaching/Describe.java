@@ -59,4 +59,13 @@ final class Describe {
             resultado = 0;
         return resultado;
     }
+
+    static String where(GeoPoint p) {
+        return switch (p) {
+            case GeoPoint(double lat, double lon) when lat == 0 && lon == 0 -> "ORIGIN";
+            case GeoPoint(double lat, double lon) when lat == 0 -> "Equator";
+            case GeoPoint(double lat, double lon) when lon == 0 -> "Greenwich";
+            case GeoPoint(double lat, double lon) -> "(" + lat + "," + lon + ")";
+        };
+    }
 }
